@@ -1,0 +1,68 @@
+# -------------------------
+# IGNORES ESPECÍFICOS DE PYTHON
+# -------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.python-version
+venv/
+env/
+pip-log.txt
+pip-delete-this-file.txt
+.tox/
+.poetry/
+.ipynb_checkpoints
+
+# -------------------------
+# IGNORES DE DJANGO
+# -------------------------
+# Base de datos local
+db.sqlite3
+/db.*
+*.log
+
+# Archivos de medios cargados por el usuario
+/media/
+
+# Archivos estáticos generados
+/static_collected/
+
+# Ignorar la carpeta 'apps/__pycache__' dentro de la estructura de la aplicación
+*/__pycache__/*
+
+# -------------------------
+# IGNORES DE ENTORNO Y OS
+# -------------------------
+# Entornos virtuales (el venv debe estar en la raíz, si lo pones en otro sitio, ajusta)
+.venv/
+build/
+dist/
+
+# Logs y Crash reports
+*.log
+*.sqlite3-journal
+.DS_Store # Mac OS
+Thumbs.db # Windows
+
+# -------------------------
+# IGNORES DE CONFIGURACIÓN Y SECRETO
+# -------------------------
+# Variables de entorno o archivos de secretos
+.env
+.local.py
+local_settings.py
+
+# Archivos de configuración de IDEs comunes
+.idea/ # JetBrains IDEs (PyCharm)
+.vscode/ # VS Code
+*.iml
+
+# -------------------------
+# IGNORES DE FRONTEND (Si integras Vite/React aquí)
+# -------------------------
+/node_modules
+/dist
+/build
+npm-debug.log
+yarn-error.log
