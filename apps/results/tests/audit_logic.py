@@ -99,3 +99,34 @@ if __name__ == '__main__':
         print("Ejecuta apps/mockchain/mocks.py y apps/votes/mocks.py antes de esta prueba.")
     except Exception as e:
         print(f"\n!!! Error inesperado durante la ejecución de pruebas: {e}")
+
+"""
+================================================================================
+LÓGICA DE AUDITORÍA INDIVIDUAL (FASE 5: VERIFICACIÓN)
+================================================================================
+
+Esta función implementa la transparencia y auditoría individual del sistema.
+Permite a cualquier usuario (votante o auditor) verificar que su voto fue 
+registrado correctamente y no ha sido alterado.
+
+### Mecanismo de Conciliación
+
+1.  **Búsqueda Local (VoteRecord):** Busca el registro local de auditoría usando el 'tx_id'. 
+    Obtiene el hash del voto registrado localmente (VoteRecord.hash).
+2.  **Búsqueda Inmutable (MockchainTx):** Busca la transacción en la Mockchain 
+    utilizando el mismo 'tx_id'. Obtiene el hash almacenado en la cadena (MockchainTx.payload_hash).
+3.  **Verificación de Integridad:** Compara ambos hashes. Si son idénticos, 
+    la integridad del voto está confirmada. Si difieren, hay una alerta.
+
+### Pruebas de Ejecución (if __name__ == '__main__':)
+
+- **Prueba de Éxito:** Utiliza el primer TX ID existente para confirmar que los hashes 
+  coinciden, validando la integridad (Status: SUCCESS).
+- **Prueba de Fallo:** Utiliza un TX ID inexistente para simular que el voto nunca fue 
+  registrado localmente, verificando que el sistema maneje el error de búsqueda 
+  correctamente (Status: FAIL_LOCAL/FAIL_CHAIN).
+
+### Confirma
+- Que el sistema puede conciliar el estado local del voto con la fuente de verdad inmutable.
+- Que el 'tx_id' es la clave de unión entre el registro local y la cadena.
+"""

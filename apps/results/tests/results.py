@@ -90,3 +90,26 @@ def calculate_election_results(election_title="Presupuesto Corporativo"):
 
 if __name__ == '__main__':
     calculate_election_results()
+
+
+"""
+================================================================================
+LÓGICA DE ESCRUTINIO (FASE 5: CONTEO DE RESULTADOS)
+================================================================================
+
+Esta función simula el proceso de escrutinio oficial post-cierre de la elección. 
+Su objetivo es garantizar la inmutabilidad y la trazabilidad del resultado final.
+
+### Mecanismo de Escrutinio
+
+1.  **Fuente de Verdad:** Consulta *exclusivamente* el modelo MockchainTx. Esto simula 
+    la consulta a la API de la Blockchain, asegurando que el conteo se basa en la 
+    fuente de datos inmutable.
+2.  **Conciliación:** Mapea el 'choice_id' encontrado dentro del Payload de la TX al 
+    nombre del Candidato (Moción 'A Favor' o 'En Contra').
+3.  **Resultado:** Cuenta las ocurrencias y presenta el resultado final.
+
+### Confirma
+- Que el sistema calcula los resultados a partir de la fuente inmutable.
+- Que los mocks creados se contabilizan correctamente (5 A Favor, 2 En Contra).
+"""
