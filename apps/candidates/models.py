@@ -56,4 +56,4 @@ class Candidate(models.Model):
         ordering = ['name']
 
     def __str__(self):
-        return f"{self.name} - {self.election.title}"
+        return f"{self.name}"

@@ -73,7 +73,7 @@ def candidate_detail(request, election_pk, pk):
     
     # 1. Verificación de Permisos: Solo el dueño de la elección puede modificar/eliminar
     election = candidate.election
-    if election.owner != request.user:
+    if (election.owner != request.user) and (request.method != "GET") :
         return Response(
             {'detail': _('No tienes permiso para modificar esta candidatura.')}, 
             status=status.HTTP_403_FORBIDDEN

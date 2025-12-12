@@ -26,26 +26,15 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     Serializer para manejar el registro de nuevos usuarios.
     Mantiene la validación de contraseñas.
     """
-    password2 = serializers.CharField(
-        style={'input_type': 'password'}, 
-        write_only=True, 
-        label=_("Confirmación de Contraseña")
-    )
-    
     class Meta:
         model = User
-        fields = ('email', 'name', 'password', 'password2')
+        fields = ('email', 'name', 'password')
         extra_kwargs = {
             'password': {'write_only': True, 'style': {'input_type': 'password'}}
         }
 
     def validate(self, data):
-        """
-        Valida que las contraseñas coincidan y que el email no esté ya registrado.
-        """
-        if data['password'] != data.pop('password2'):
-            raise serializers.ValidationError({"password": _("Las contraseñas no coinciden.")})
-
+        
         if User.objects.filter(email=data['email']).exists():
             raise serializers.ValidationError({"email": _("Este correo electrónico ya está registrado.")})
             

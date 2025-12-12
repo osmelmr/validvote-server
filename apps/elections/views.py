@@ -8,6 +8,7 @@ from django.utils.translation import gettext_lazy as _
 from django.db import transaction
 # Si no existe, añade esta importación para la llamada externa:
 import requests 
+from requests.exceptions import RequestException
 # Importaciones de modelos y serializers
 from .models import Election 
 from .serializers import ElectionSerializer # Asumimos que este existe
@@ -68,7 +69,7 @@ def verify_eligibility(request, election_pk):
             else:
                 return Response({'eligible': False, 'reason': _('Rechazado por el validador externo.')}, status=status.HTTP_200_OK)
 
-        except requests.exceptions.RequestException:
+        except RequestException:
             # Falla de red, tiempo de espera o respuesta inválida del servicio externo
             return Response(
                 {'eligible': False, 'reason': _('Error al contactar el servicio de validación externo.')}, 
@@ -91,7 +92,7 @@ def election_list_create(request):
     # -----------------------------------
     if request.method == 'GET':
         # Listamos todas las elecciones, o podríamos filtrar solo las activas/abiertas
-        elections = Election.objects.all().order_by('-start_date')
+        elections = Election.objects.all().order_by('-start_at')
         serializer = ElectionSerializer(elections, many=True)
         return Response(serializer.data)
 
@@ -108,7 +109,7 @@ def election_list_create(request):
             
         serializer = ElectionSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(owner=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -150,7 +151,7 @@ def election_detail(request, pk):
         serializer = ElectionSerializer(election, data=request.data, partial=partial)
         
         # Opcional: Impedir la edición si la elección ya está abierta/cerrada
-        if election.is_active: 
+        if election.is_active_or_finished: 
              return Response(
                 {'detail': _('No se puede modificar una elección una vez que está activa o ha finalizado.')},
                 status=status.HTTP_403_FORBIDDEN

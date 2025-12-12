@@ -25,7 +25,6 @@ class VoterSerializer(serializers.ModelSerializer):
             'updated_at'
         )
         read_only_fields = (
-            'voted',          # Solo el sistema de votación puede marcar 'voted'
             'user_email', 
             'election_title',
             'created_at', 

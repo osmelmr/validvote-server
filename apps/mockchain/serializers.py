@@ -9,4 +9,4 @@ class MockchainTxSerializer(serializers.ModelSerializer):
     class Meta:
         model = MockchainTx
         fields = '__all__'
-        read_only_fields = ('tx_id', 'block_number', 'created_at',)
+        read_only_fields = ( 'created_at',)

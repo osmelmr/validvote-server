@@ -76,6 +76,14 @@ class Election(models.Model):
         verbose_name_plural = _('elecciones')
         ordering = ['-created_at']
 
+    @property
+    def is_active_or_finished(self):
+        """
+        Retorna True si la elección está OPEN o CLOSED.
+        Se usa para restringir actualizaciones.
+        """
+        return self.status in [self.Status.OPEN, self.Status.CLOSED]
+    
     def __str__(self):
         return f"{self.title} ({self.get_status_display()})"
 
@@ -83,11 +91,6 @@ class Election(models.Model):
         """
         Validación de reglas de negocio a nivel de modelo.
         """
-        # Regla: La fecha de fin no puede ser anterior a la fecha de inicio
-        if self.start_at and self.end_at and self.start_at >= self.end_at:
-            raise ValidationError({
-                'end_at': _('La fecha de fin debe ser posterior a la fecha de inicio.')
-            })
         
         # Regla: max_sel debe ser al menos 1
         if self.max_sel < 1:
@@ -96,5 +99,5 @@ class Election(models.Model):
             })
 
     def save(self, *args, **kwargs):
-        self.full_clean()  # Asegura que se ejecute clean() antes de guardar
+        # self.full_clean()  # Asegura que se ejecute clean() antes de guardar
         super().save(*args, **kwargs)

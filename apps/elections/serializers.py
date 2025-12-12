@@ -14,6 +14,18 @@ class ElectionSerializer(serializers.ModelSerializer):
     # Campo de solo lectura para mostrar el tipo en formato legible
     type_display = serializers.CharField(source='get_type_display', read_only=True)
     
+    def validate(self, data):
+        # Obtiene las fechas validadas o las existentes si es un PATCH
+        start_at = data.get('start_at', self.instance.start_at if self.instance else None)
+        end_at = data.get('end_at', self.instance.end_at if self.instance else None)
+
+        if start_at and end_at and end_at <= start_at:
+            raise serializers.ValidationError({
+                'end_at': 'La fecha de fin debe ser posterior a la fecha de inicio.'
+            })
+
+        return data
+    
     class Meta:
         model = Election
         fields = (
